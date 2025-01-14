@@ -1,4 +1,4 @@
-import { Stack, StackProps, Duration } from 'aws-cdk-lib';
+import { Stack, StackProps, Duration, RemovalPolicy } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
@@ -14,21 +14,43 @@ export class YoutubeStepFunctionStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // Create S3 bucket for video assets
+    // Create S3 bucket for video assets with stable configuration
     this.videoBucket = new s3.Bucket(this, 'VideoBucket', {
+      bucketName: `youtube-videos-${this.account}-${this.region}`,
       versioned: true,
       encryption: s3.BucketEncryption.S3_MANAGED,
       lifecycleRules: [
         {
           expiration: Duration.days(365)
         }
-      ]
+      ],
+      removalPolicy: RemovalPolicy.RETAIN
     });
 
-    // Create DynamoDB table for metadata
+    // Create DynamoDB table for metadata with stable configuration
     this.metadataTable = new dynamodb.Table(this, 'MetadataTable', {
+      tableName: `YoutubeMetadata-${this.account}-${this.region}`,
       partitionKey: { name: 'videoId', type: dynamodb.AttributeType.STRING },
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: true,
+      timeToLiveAttribute: 'expirationTime',
+      stream: dynamodb.StreamViewType.NEW_IMAGE
+    });
+
+    // Add Global Secondary Index for status queries
+    this.metadataTable.addGlobalSecondaryIndex({
+      indexName: 'StatusIndex',
+      partitionKey: { name: 'status', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'createdAt', type: dynamodb.AttributeType.NUMBER },
+      projectionType: dynamodb.ProjectionType.ALL
+    });
+
+    // Add Local Secondary Index for channel queries
+    this.metadataTable.addLocalSecondaryIndex({
+      indexName: 'ChannelIndex',
+      sortKey: { name: 'channelId', type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL
     });
 
     // Define Step Function states
@@ -106,10 +128,12 @@ export class YoutubeStepFunctionStack extends Stack {
       .next(checkTranscript)
       .next(saveMetadata);
 
-    // Create state machine
+    // Create state machine with stable configuration
     this.stateMachine = new stepfunctions.StateMachine(this, 'VideoProcessingStateMachine', {
+      stateMachineName: `YoutubeProcessing-${this.account}-${this.region}`,
       definition,
-      timeout: Duration.minutes(30)
+      timeout: Duration.minutes(30),
+      removalPolicy: RemovalPolicy.RETAIN
     });
 
     // Grant permissions
