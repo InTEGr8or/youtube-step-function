@@ -1,39 +1,27 @@
-# YouTube Step Function Worklog - 2025-01-14
+# 2025-01-14 YouTube Step Function Worklog
 
 ## Task
-Create an AWS Step Function CDK project that:
-1. Accepts YouTube video IDs
-2. Stores video metadata using S3 and DynamoDB
-3. Processes videos through multiple steps:
-   - Retrieve thumbnail
-   - Retrieve transcript (if available)
-   - Download video
-   - Enable future video analysis steps
+Update S3 permissions for the thumbnail download Lambda function in the YouTube Step Function CDK stack.
 
-## Problem Understanding
-We need to create a serverless workflow that:
-- Accepts YouTube video IDs as input
-- Stores video metadata and processing status
-- Handles asynchronous processing steps
-- Uses S3 for storing video assets and DynamoDB for metadata
-- Is extensible for future analysis steps
+## Understanding
+The downloadThumbnail Lambda function needs both Put and PutAcl permissions on the videoBucket to properly store and manage access control for thumbnails.
 
-## Implementation Plan
-1. Create CDK stack with:
-   - S3 bucket for video assets
-   - DynamoDB table for metadata
-   - Step Function state machine
-   - Lambda functions for processing steps
-2. Implement initial processing steps:
-   - Save video ID
-   - Retrieve thumbnail
-   - Retrieve transcript
-   - Download video
-3. Use S3 tags for tracking processing status
-4. Implement error handling and retries
+## Plan
+1. Update the CDK stack to grant Put and PutAcl permissions to the downloadThumbnail function
+2. Verify the permissions are correctly applied in the generated CloudFormation template
+
+## Implementation
+Updated the stack.ts file to replace:
+```typescript
+videoBucket.grantReadWrite(downloadThumbnail);
+```
+with:
+```typescript
+videoBucket.grantPut(downloadThumbnail);
+videoBucket.grantPutAcl(downloadThumbnail);
+```
 
 ## Next Steps
-1. Create basic CDK stack structure
-2. Define S3 bucket and DynamoDB table
-3. Create initial Step Function state machine
-4. Implement first Lambda function for saving video ID
+- Test the updated permissions by deploying the stack
+- Verify the thumbnail download functionality works as expected
+- Add error handling for cases where thumbnails are not available
