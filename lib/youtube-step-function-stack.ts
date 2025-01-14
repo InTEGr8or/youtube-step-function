@@ -64,9 +64,17 @@ export class YoutubeStepFunctionStack extends cdk.Stack {
       }));
 
     // Create the state machine
-    new sfn.StateMachine(this, 'YoutubeProcessingStateMachine', {
-      definition,
+    this.stateMachine = new sfn.StateMachine(this, 'YoutubeProcessingStateMachine', {
+      definitionBody: sfn.DefinitionBody.fromChainable(definition),
       timeout: cdk.Duration.minutes(15)
     });
+
+    // Expose state machine ARN
+    this.stateMachineArn = this.stateMachine.stateMachineArn.toString();
   }
+
+
+  // Public properties for testing
+  public readonly stateMachine: sfn.StateMachine;
+  public readonly stateMachineArn: string;
 }
