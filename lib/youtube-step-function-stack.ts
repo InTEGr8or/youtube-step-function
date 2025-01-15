@@ -140,17 +140,31 @@ export class YoutubeStepFunctionStack extends cdk.Stack {
             })
           }
         }),
+        requestTemplates: {
+          'application/json': JSON.stringify({
+            input: "$util.escapeJavaScript($input.json('$'))",
+            stateMachineArn: this.stateMachine.stateMachineArn
+          })
+        },
         integrationResponses: [{
           statusCode: '200',
           responseTemplates: {
             'application/json': JSON.stringify({
-              stateMachineArn: this.stateMachine.stateMachineArn,
-              executionArn: "$context.integrationErrorMessage"
+              executionArn: "$input.path('$.executionArn')",
+              startDate: "$input.path('$.startDate')"
             })
           }
-        }]
+        }],
+        passthroughBehavior: apigateway.PassthroughBehavior.NEVER
       }
-    }));
+    }), {
+      methodResponses: [{
+        statusCode: '200',
+        responseModels: {
+          'application/json': apigateway.Model.EMPTY_MODEL
+        }
+      }]
+    });
 
     // Expose state machine ARN
     this.stateMachineArn = this.stateMachine.stateMachineArn.toString();
