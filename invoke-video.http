@@ -1,0 +1,14 @@
+### Process a YouTube video
+# @name processVideo
+POST {{apiUrl}}/process
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "videoId": "{{videoId}}"
+}
+
+### Variables
+@apiUrl = 
+@apiKey = {{$processEnv API_KEY}}
+@videoId = dQw4w9WgXcQ

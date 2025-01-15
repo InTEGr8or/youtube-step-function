@@ -23,7 +23,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["lib/*"]
-    }
+    },
+    "esModuleInterop": true
   },
   "include": ["lib/**/*", "bin/**/*"],
   "exclude": ["node_modules", "cdk.out"]

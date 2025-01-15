@@ -31,7 +31,9 @@ export function createLambdaFunctions(scope: Construct): YoutubeLambdaFunctions 
     functionName: 'YoutubeFetchMetadata',
     entry: path.join(__dirname, 'lambda-handlers/fetch-metadata.ts'),
     environment: {
-      YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY || ''
+      YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY || '',
+      BUCKET_NAME: process.env.BUCKET_NAME || '',
+      TABLE_NAME: process.env.TABLE_NAME || ''
     }
   });
 

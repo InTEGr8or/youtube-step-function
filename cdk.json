@@ -17,6 +17,7 @@
     ]
   },
   "context": {
+    "account": "318364255844",
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/core:target-partitions": [

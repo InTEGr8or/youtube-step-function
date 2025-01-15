@@ -24,6 +24,10 @@ export class YoutubeStepFunctionStack extends cdk.Stack {
     const tableName = process.env.DYNAMODB_TABLE_NAME;
 
     if (!bucketName || !youtubeApiKey || !tableName) {
+      console.error('Missing environment variables:');
+      console.error(`BUCKET_NAME: ${bucketName}`);
+      console.error(`YOUTUBE_API_KEY: ${youtubeApiKey ? '*****' : 'missing'}`);
+      console.error(`DYNAMODB_TABLE_NAME: ${tableName}`);
       throw new Error('Missing required environment variables. Please check .envrc configuration');
     }
 

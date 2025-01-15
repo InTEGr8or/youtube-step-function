@@ -2,6 +2,7 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { YoutubeStepFunctionStack } from '../lib/youtube-step-function-stack';
+// Environment variables are loaded via direnv
 
 const app = new cdk.App();
 new YoutubeStepFunctionStack(app, 'YoutubeStepFunctionStack', {
