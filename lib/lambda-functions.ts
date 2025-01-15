@@ -14,7 +14,7 @@ export interface YoutubeLambdaFunctions {
 
 export function createLambdaFunctions(scope: Construct): YoutubeLambdaFunctions {
   const commonProps = {
-    runtime: Runtime.NODEJS_18_X,
+    runtime: Runtime.NODEJS_20_X,
     memorySize: 512,
     timeout: Duration.seconds(30),
     logRetention: RetentionDays.ONE_WEEK,

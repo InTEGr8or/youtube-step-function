@@ -1,18 +1,24 @@
 #!/bin/bash
+set -e
 
-# Deploy the CDK stack locally
+# Deploy CDK stack
 echo "Deploying CDK stack..."
-cdk deploy --outputs-file outputs.json
+cdk_output=$(cdk deploy --outputs-file cdk-outputs.json)
 
-# Get the API URL from CDK output
-API_URL=$(jq -r '.YoutubeStepFunctionStack.ApiUrl' outputs.json)
+# Get API URL from outputs
+api_url=$(jq -r '.YoutubeStepFunctionStack.ApiUrl' cdk-outputs.json)
 
-# Update the invoke-video.http file with the API URL
-sed -i "s|@apiUrl = .*|@apiUrl = $API_URL|" invoke-video.http
+# Update .envrc.local
+echo "Updating .envrc.local..."
+echo -e "# Deployment-specific environment variables" > .envrc.local
+echo "export API_URL=$api_url" >> .envrc.local
 
-# Run the API tests
+# Reload direnv
+echo "Reloading direnv..."
+direnv allow .
+
+# Run tests
 echo "Running API tests..."
-http-client invoke-video.http
+node scripts/test-api.js
 
-# Clean up
-rm outputs.json
+echo "Deployment and testing completed successfully"

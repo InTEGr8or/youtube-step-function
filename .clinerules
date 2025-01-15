@@ -4,5 +4,17 @@ date: 225-01-14T15:59:00.000Z
 version: 1.0.0
 ---
 
-1. Use your TypeScript/AWS/CDK expertise and industry best-practices to create this AWS CDK, deploy it, and test it.
-2. 
+1. Create a plan for the current task.
+    1. Read the contenxt of the project directory.
+    2. Use the MCP date server to get the current date.
+    3. Create a worklog document in `docs/worklog` prefixed with the current date.
+    4. Use the sequential thinking MCP to create a checkboxed bulleted list of tasks and subtasks to carry out for the current conversation.
+    5. When work tasks or subtasks are completed, check them off.
+    6. If you have to deviate from the plan, use the sequential thinking MCP to edit the worklog, and then start implementing the new plan.
+2. Don't create files that already exist.
+3. Don't overwrite files without reading the current content first.
+4. Use your TypeScript/AWS/CDK expertise and industry best-practices to create this AWS CDK, deploy it, and test it.
+5. Make the CDK output the URL of the deployed API.
+6. Make sure we can testthe API HTTP edpoint afte it's deployed.
+7. Use `direnv` and `.envrc` for environmet variables on the local machine.
+8. Treat the `.envrc` as read-only. If you want to edit it, tell me what it should say.

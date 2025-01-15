@@ -80,18 +80,18 @@ export class YoutubeStepFunctionStack extends cdk.Stack {
             outputPath: '$.Payload',
             retryOnServiceExceptions: true
           })
-          .next(new sfnTasks.LambdaInvoke(this, 'TagVideoStatus', {
-            lambdaFunction: new lambda.Function(this, 'TagVideoStatusFunction', {
-              runtime: lambda.Runtime.NODEJS_20_X,
-              code: lambda.Code.fromAsset('lambda-handlers'),
-              handler: 'tag-video-status.handler',
-              environment: {
-                BUCKET_NAME: videoBucket.bucketName,
-                TABLE_NAME: videoTable.tableName
-              }
-            }),
-            outputPath: '$.Payload'
-          }))
+            .next(new sfnTasks.LambdaInvoke(this, 'TagVideoStatus', {
+              lambdaFunction: new lambda.Function(this, 'TagVideoStatusFunction', {
+                runtime: lambda.Runtime.NODEJS_20_X,
+                code: lambda.Code.fromAsset('lambda-handlers'),
+                handler: 'tag-video-status.handler',
+                environment: {
+                  BUCKET_NAME: videoBucket.bucketName,
+                  TABLE_NAME: videoTable.tableName
+                }
+              }),
+              outputPath: '$.Payload'
+            }))
         )
         .otherwise(new sfn.Fail(this, 'InvalidVideoStatus', {
           cause: 'Video status is not PROCESSING',
