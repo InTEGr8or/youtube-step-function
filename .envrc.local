@@ -1,2 +1,0 @@
-# Deployment-specific environment variables
-export API_URL=https://cggahwl0v4.execute-api.us-east-1.amazonaws.com/prod/

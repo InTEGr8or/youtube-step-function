@@ -1,4 +1,4 @@
-import { test, expect } from '@jest/globals';
+import { test, expect } from 'vitest';
 import { App } from 'aws-cdk-lib';
 import { YoutubeStepFunctionStack } from '../lib/youtube-step-function-stack';
 
