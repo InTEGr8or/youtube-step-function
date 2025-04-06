@@ -1,42 +1,31 @@
-# Task: Fix Failing Tests
+# Task: Complete Vitest Migration
 
 ## Goal
 
-Address the 4 failing tests identified in `plan.md` (section 3.2) to establish a stable baseline before implementing new features.
+Remove remaining Jest dependencies and configuration files to fully standardize on Vitest for testing, as outlined in `plan.md` (section 3.2) and the main worklog (`docs/worklog/2025-04-06-planning-and-test-fixing.md`, step 2).
 
-## Failing Tests
+## Steps
 
-- `test/integration.test.ts > DynamoDB table has correct configuration` (Timeout)
-- `test/integration.test.ts > API Gateway is configured correctly` (Timeout)
-- `test/workflow.test.ts > state machine ARN is correctly exposed` (Timeout)
-- `test/workflow.test.ts > state machine has correct configuration` (Timeout)
-
-## Investigation Areas (from plan.md)
-
-- **Test Timeouts:** Are the default timeouts too short for these CDK-interaction tests? Consider increasing them specifically for these test suites or globally via Vitest configuration.
-- **CDK Resource Mocking:** Is the interaction with CDK resources being mocked effectively, or are the tests attempting real interactions that are slow or incomplete in the test environment?
-- **CDK Synthesis/Deployment:** Are the CDK operations within the test setup (`beforeAll`, `beforeEach`) taking too long? Can they be optimized or performed less frequently?
+1.  **Remove Dependencies:** Edit `package.json` and remove `jest` and `ts-jest` from the `devDependencies` section.
+2.  **Delete Config:** Delete the `jest.config.js` file from the project root.
+3.  **Update Lockfile:** Run `npm install` to update `package-lock.json` based on the changes in `package.json`.
+4.  **Verify Tests:** Run `npm run test` to ensure all tests still pass correctly using only the Vitest configuration and runner.
 
 ## Acceptance Criteria
 
-- All 10 tests pass when running `npm run test`.
-- The root cause of the timeouts is understood and documented (if necessary).
-- The solution applied is robust and doesn't mask underlying issues.
+- `jest` and `ts-jest` are removed from `package.json` and `package-lock.json`.
+- `jest.config.js` file is deleted.
+- Running `npm run test` executes successfully and all tests pass.
 
 ## Next Steps
 
-- Investigate the specific code in `test/integration.test.ts` and `test/workflow.test.ts`.
-- Analyze the test setup and teardown procedures.
-- Experiment with potential solutions (increasing timeouts, improving mocks, optimizing CDK usage).
+- Proceed with the implementation steps outlined above.
 
-## Resolution (2025-04-06)
+## Completion Status
 
-The failing tests were due to timeouts caused by CDK operations (stack instantiation and synthesis) exceeding the default 5-second Vitest timeout.
-
-**Fix:** Increased the timeout to 30000ms (30 seconds) for the following tests:
-- `test/integration.test.ts > DynamoDB table has correct configuration`
-- `test/integration.test.ts > API Gateway is configured correctly`
-- `test/workflow.test.ts > state machine ARN is correctly exposed`
-- `test/workflow.test.ts > state machine has correct configuration`
-
-**Result:** All 10 tests now pass when running `npm run test`.
+**Completed:** All steps have been successfully executed.
+- Jest dependencies (`jest`, `ts-jest`) removed from `package.json`.
+- `jest.config.js` deleted.
+- `package-lock.json` updated via `npm install`.
+- `npm run test` confirmed all tests pass with Vitest.
+The Vitest migration is now fully complete.
