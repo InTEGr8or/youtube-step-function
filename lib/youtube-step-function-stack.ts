@@ -153,7 +153,7 @@ export class YoutubeStepFunctionStack extends cdk.Stack {
       description: 'The name of the S3 bucket used to store video assets'
     });
 
-  // Output state machine ARN
+    // Output state machine ARN
     new cdk.CfnOutput(this, 'StateMachineArn', {
       value: this.stateMachine.stateMachineArn,
       description: 'The ARN of the Step Function state machine'

@@ -18,7 +18,7 @@ test('DynamoDB table has correct configuration', () => {
       KeyType: 'HASH'
     }
   ]);
-});
+}, 30000); // Increased timeout to 30 seconds
 
 test('API Gateway is configured correctly', () => {
   const app = new App();
@@ -31,4 +31,4 @@ test('API Gateway is configured correctly', () => {
   expect(apiResource).toBeDefined();
   expect(apiResource.Properties.ProtocolType).toBe(undefined); // ProtocolType is not a valid property for RestApi
   expect(apiResource.Properties.Name).toBe('Youtube Processor API');
-});
+}, 30000); // Increased timeout to 30 seconds

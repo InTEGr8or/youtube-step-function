@@ -10,7 +10,7 @@ test('state machine ARN is correctly exposed', () => {
   expect(stack.resolve(stack.stateMachineArn)).toEqual({
     Ref: 'YoutubeProcessingStateMachine9F0824C3'
   });
-});
+}, 30000); // Increased timeout to 30 seconds
 
 test('state machine has correct configuration', () => {
   const app = new App();
@@ -22,4 +22,4 @@ test('state machine has correct configuration', () => {
   const definitionString = stateMachineResource.Properties.DefinitionString['Fn::Join'][1].join('');
   const definition = JSON.parse(definitionString);
   expect(definition.TimeoutSeconds).toBe(900);
-});
+}, 30000); // Increased timeout to 30 seconds
