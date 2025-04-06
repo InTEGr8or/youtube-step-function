@@ -12,8 +12,8 @@
 ## Implementation Phase (Based on plan.md)
 
 1.  [x] **Fix Tests:** Address the 4 failing tests first to establish a stable baseline. (Completed in sub-task: Increased timeouts). See `docs/worklog/2025-04-06-fix-failing-tests.md`.
-2.  [ ] **Migrate Tests:** Remove Jest dependencies and configuration, ensuring all tests pass with Vitest.
-3.  [ ] **Research:** Confirm `yt-dlp` as the fallback and determine the best integration method (wrapper library, direct execution, Lambda layer).
+2.  [x] **Migrate Tests:** Remove Jest dependencies and configuration, ensuring all tests pass with Vitest. (Completed in sub-task).
+3.  [x] **Research:** Confirm `yt-dlp` as the fallback and determine the best integration method. (Completed: Recommended approach is custom Lambda Layer with `yt-dlp` binary + Python, using `yt-dlp-exec` wrapper with `YOUTUBE_DL_SKIP_DOWNLOAD=true`, and streaming to S3).
 4.  [ ] **Implement Download Logic:**
     *   [ ] Update the primary `download-video.ts` Lambda with improved error handling.
     *   [ ] Implement the fallback download mechanism (either in the same Lambda or a new one).
